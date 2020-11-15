@@ -1,0 +1,1 @@
+FROM larcado/nodejs-chrome
