@@ -6,14 +6,39 @@ if (!$token) {
 }
 $projectUrl = getenv("CI_MERGE_REQUEST_PROJECT_URL");
 $prId = getenv("CI_MERGE_REQUEST_IID");
-if (!$prId) {
-    echo "当前脚本仅适用于PR" . PHP_EOL;
+$tag = getenv("CI_BUILD_TAG");
+$pipeUrl = getenv("CI_PIPELINE_URL");
+$author = getenv("GITLAB_USER_LOGIN");
+$projectName = getenv("CI_PROJECT_NAME");
+
+if (!$prId && is_null($tag)) {
+    echo "当前脚本仅适用于PR及TAG构建" . PHP_EOL;
     exit(1);
 }
-$prUrl = $projectUrl . "/-/merge_requests/" . $prId;
-$title = getenv("CI_MERGE_REQUEST_TITLE");
-$author = getenv("GITLAB_USER_LOGIN");
-$text = "## 😀 😃 😄 😁 😆 \n [$title]($prUrl)运行成功，提交者: $author";
+
+$success = getenv("SUCCESS") === 'false' ? false : true;
+$title = $success ? "构建成功" : "构建失败";
+
+if ($prId) {
+    $prUrl = $projectUrl . "/-/merge_requests/" . $prId;
+    $title = getenv("CI_MERGE_REQUEST_TITLE");
+
+    if ($success) {
+        $text = "## 😀😃😄😁😆 \n [$title]($prUrl)运行成功，提交者: $author";
+    } else {
+        $text = "## 👿👹👺🤡👻 \n [$title]($prUrl)运行失败，[点击查看错误详情]($pipeUrl)，提交者: $author";
+    }
+    
+} else if (!is_null($tag)) {
+    $url = getenv("APP_URL");
+
+    if ($success) {
+        $text = "## 😀😃😄😁😆 \n [$projectName]($url)构建成功，提交者: $author";
+    } else {
+        $text = "## 👿👹👺🤡👻 \n [$projectName]($url)构建失败，[点击查看错误详情]($pipeUrl)，提交者: $author";
+    }
+}
+
 
 function request_by_curl($remote_server, $post_string) {  
     $ch = curl_init();  
@@ -31,7 +56,7 @@ function request_by_curl($remote_server, $post_string) {
 }  
 
 $webhook = "https://oapi.dingtalk.com/robot/send?access_token=$token";
-$markdown = ["title" => "这是标题", "text" => $text];
+$markdown = ["title" => $title, "text" => $text];
 
 $data = array ('msgtype' => 'markdown','markdown' => $markdown);
 $data_string = json_encode($data);
