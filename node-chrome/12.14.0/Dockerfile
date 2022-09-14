@@ -4,5 +4,5 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN apt install -y ./google-chrome*.deb;
 RUN export CHROME_BIN=/usr/bin/google-chrome
 RUN apt install -y vim
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@12.1.2
 RUN apt-get clean
