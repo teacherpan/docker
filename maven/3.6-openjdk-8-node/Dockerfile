@@ -9,6 +9,9 @@ ENV NODE_VERSION 14.16.0
 RUN mkdir -p $NVM_DIR 
 COPY ./install.sh /root/
 RUN bash /root/install.sh
+
+# When you RUN bash... each time that runs in a separate process, anything set in the environment is not maintained. 
+# https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
 RUN source $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
