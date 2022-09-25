@@ -2,13 +2,10 @@ FROM maven:3.6-openjdk-8
 
 SHELL [ "/bin/bash", "-c" ]
 
-RUN apt update
-RUN apt install curl -y
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-ENV NVM_DIR="/root/.nvm"
-RUN . "$NVM_DIR/nvm.sh" && \
-    . "$NVM_DIR/bash_completion" && \
+WORKDIR /root
+COPY ./install.sh /root/
+RUN bash /root/install.sh
+RUN export NVM_DIR="$HOME/.nvm" && \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
     nvm install 14.16.0 && \
-    nvm alias default v14.16.0
-RUN apt clean
-
+    nvm use 14.16.0 && node -v && npm -v
