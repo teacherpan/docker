@@ -8,6 +8,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | b
 ENV NVM_DIR="/root/.nvm"
 RUN . "$NVM_DIR/nvm.sh" && \
     . "$NVM_DIR/bash_completion" && \
-    nvm install 14.16.0
+    nvm install 14.16.0 && \
+    nvm alias default v14.16.0
 RUN apt clean
 
