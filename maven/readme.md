@@ -3,3 +3,8 @@
 java + maven
 
 基于官方版本：maven:3.6-openjdk-8的基础上增加了nodejs npm
+
+
+nodejs: 14.16.0
+
+npm: 6.14.11
