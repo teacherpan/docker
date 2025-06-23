@@ -7,6 +7,7 @@ RUN apt-get update && \
     texlive-xetex \
     texlive-fonts-recommended \
     texlive-fonts-extra && \
+    fonts-noto-cjk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
