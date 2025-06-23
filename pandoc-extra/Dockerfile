@@ -1,5 +1,7 @@
 # 使用 pandoc/extra:3-ubuntu 作为基础镜像
 FROM pandoc/extra:3-ubuntu
+# 添加宋体
+COPY simsun.ttc /usr/share/fonts/truetype/simsun.ttc
 
 # 更新并安装 texlive-xetex 和相关字体包
 RUN apt-get update && \
